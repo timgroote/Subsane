@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using SubsonicAPI;
 using SubSane.ConsoleForms;
@@ -14,7 +15,7 @@ namespace SubSane
     }
 
     class Program
-    {                
+    {
         public static PlayMode mode = PlayMode.Dumb;
 
         private static String server;
@@ -26,9 +27,9 @@ namespace SubSane
         private static Random ran = new Random();
 
         private static Dictionary<string, string> Artists;
-                                                          
-        private static Dictionary<MusicFolder, List<Song>> SongsByAlbum { get; set; } 
-        
+
+        private static Dictionary<MusicFolder, List<Song>> SongsByAlbum { get; set; }
+
         private static BassNetPlayer _thePlayer;
         private static BassNetPlayer ThePlayer
         {
@@ -43,9 +44,16 @@ namespace SubSane
         static void Main(string[] args)
         {
             Subsonic.appName = "SubSane";
-            //ha ha fuck you guys.
-            BassNet.Registration("buddyknox@usa.org", "2X11841782815");
-                                                  
+            
+            string filename = "SubsonicRegfile.nfo";
+            if (File.Exists(filename))
+            {
+                String fileContents = File.ReadAllText(filename);
+                string[] tokens = fileContents.Split(' ');
+                BassNet.Registration(tokens[0], tokens[1]);
+            }
+            
+
             if (args.Length != 3)
             {
                 DisplayLoginForm();
@@ -68,13 +76,13 @@ namespace SubSane
                     Console.Out.WriteLine("Login OK! Welcome to {0}, {1}!", server, user);
                     EnterMainLoop();
                 }
-            }                                           
-            
+            }
+
         }
 
         private static void DisplayLoginForm()
         {
-            ConsoleForm loginForm = new ConsoleForm(Console.WindowWidth,Console.WindowHeight) {Name = "Login form"};
+            ConsoleForm loginForm = new ConsoleForm(Console.WindowWidth, Console.WindowHeight) { Name = "Login form" };
             Label lblTitle = new Label("lblTitle",
                 new Point(1, 2),
                 10,
@@ -202,13 +210,13 @@ namespace SubSane
                             {
                                 UOut(ConsoleColor.Red, "cannot read song properties. \r\n{1}\r\n{2}", ConsoleColor.White, e.Message, e.StackTrace);
                             }
-                            
+
                         }
                         else
                         {
                             UOut(ConsoleColor.Red, "Error getting random song. nothing enqueued.");
-                        }   
-                    break;
+                        }
+                        break;
 
 
                     case "queue":
@@ -267,7 +275,7 @@ namespace SubSane
                         Console.Out.Write("[");
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
 
-                        int numberOfBlocks = (int) Math.Floor((double) (ThePlayer.ProgressPercentage/2));
+                        int numberOfBlocks = (int)Math.Floor((double)(ThePlayer.ProgressPercentage / 2));
                         for (int i = 0; i < 50; i++)
                         {
                             if (i < numberOfBlocks)
@@ -300,7 +308,7 @@ namespace SubSane
                             ThePlayer.AddSong(sg);
                             UOut(ConsoleColor.Yellow, "Enqueued {0}", ConsoleColor.Black, sg.Name);
                         }
-                    break;
+                        break;
 
                     case "partymode":
                         mode = PlayMode.Party;
@@ -311,13 +319,13 @@ namespace SubSane
                             {
                                 ThePlayer.PlayList.Enqueue(rsong);
                             }
-                            
+
                         }
-                    break;
+                        break;
 
                     case "dumbmode":
                         mode = PlayMode.Dumb;
-                    break;
+                        break;
 
                     case "?":
                         Console.Out.WriteLine(@"exit
@@ -376,7 +384,7 @@ dumbmode
 
                     default:
                         UOut(ConsoleColor.Red, "not recognised. enter '?' for help.");
-                    break;
+                        break;
                 }
             }
 
@@ -402,11 +410,11 @@ dumbmode
         {
             Console.ForegroundColor = foregroundColor;
             Console.BackgroundColor = backgroundColor;
-            Console.Out.WriteLine(message, formatParams);                   
+            Console.Out.WriteLine(message, formatParams);
             Console.ResetColor();
         }
 
-        
+
 
         private static IEnumerable<Song> ListSongsByAlbumId(string albumId)
         {
@@ -421,7 +429,7 @@ dumbmode
                 UOut(ConsoleColor.Yellow, "K, bye!");
                 return;
             }
-             
+
             LoginResult loginResult = HandleLogin(sender.Textboxes["txtServer"].Text, sender.Textboxes["txtUser"].Text, sender.Textboxes["txtPass"].Text);
             if (loginResult.Success == false)
             {
@@ -432,7 +440,7 @@ dumbmode
                 Console.ResetColor();
                 Console.Clear();
                 EnterMainLoop();
-                
+
             }
         }
 
@@ -455,7 +463,7 @@ dumbmode
             {
                 return new LoginResult("FAIL");
             }
-            
+
         }
 
         private static Song GetSongById(string id)
@@ -512,7 +520,7 @@ dumbmode
         {
             ThePlayer.Stop();
         }
-                                  
+
         private static void Play()
         {
             ThePlayer.Play();
