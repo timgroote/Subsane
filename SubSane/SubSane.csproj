@@ -83,6 +83,9 @@
     <None Include="libbass.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="SubsonicRegfile.nfo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SubsonicAPI\SubsonicAPI.csproj">

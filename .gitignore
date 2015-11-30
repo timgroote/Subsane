@@ -9,3 +9,5 @@ SubSane/SubsonicRegfile.nfo
 /subsane/bin/Release/libbass.so
 /subsane/bin/Release/SubSane.exe.config
 /subsane/bin/Release/SubSane.vshost.exe.config
+SubSane/bin/Debug/SubsonicRegfile.nfo
+SubSane/obj/
