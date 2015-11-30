@@ -1,0 +1,5 @@
+D:\temp\subsane\SubsonicPlayer\SubsonicAPI\bin\Debug\SubsonicAPI.dll
+D:\temp\subsane\SubsonicPlayer\SubsonicAPI\bin\Debug\SubsonicAPI.pdb
+D:\temp\subsane\SubsonicPlayer\SubsonicAPI\obj\Debug\SubsonicAPI.csprojResolveAssemblyReference.cache
+D:\temp\subsane\SubsonicPlayer\SubsonicAPI\obj\Debug\SubsonicAPI.dll
+D:\temp\subsane\SubsonicPlayer\SubsonicAPI\obj\Debug\SubsonicAPI.pdb

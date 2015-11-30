@@ -1,0 +1,12 @@
+D:\temp\subsane\SubsonicPlayer\SubSane\bin\Release\SubSane.exe.config
+D:\temp\subsane\SubsonicPlayer\SubSane\bin\Release\SubSane.exe
+D:\temp\subsane\SubsonicPlayer\SubSane\bin\Release\SubSane.pdb
+D:\temp\subsane\SubsonicPlayer\SubSane\bin\Release\SubsonicAPI.dll
+D:\temp\subsane\SubsonicPlayer\SubSane\bin\Release\SubsonicAPI.pdb
+D:\temp\subsane\SubsonicPlayer\SubSane\obj\Release\SubSane.csprojResolveAssemblyReference.cache
+D:\temp\subsane\SubsonicPlayer\SubSane\obj\Release\SubSane.exe
+D:\temp\subsane\SubsonicPlayer\SubSane\obj\Release\SubSane.pdb
+D:\temp\subsane\SubsonicPlayer\SubSane\bin\Release\bass.dll
+D:\temp\subsane\SubsonicPlayer\SubSane\bin\Release\libbass.so
+D:\temp\subsane\SubsonicPlayer\SubSane\bin\Release\Bass.Net.dll
+D:\temp\subsane\SubsonicPlayer\SubSane\bin\Release\Bass.Net.xml

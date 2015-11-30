@@ -1,0 +1,5 @@
+D:\temp\subsane\SubsonicPlayer\SubsonicAPI\bin\Release\SubsonicAPI.dll
+D:\temp\subsane\SubsonicPlayer\SubsonicAPI\bin\Release\SubsonicAPI.pdb
+D:\temp\subsane\SubsonicPlayer\SubsonicAPI\obj\Release\SubsonicAPI.dll
+D:\temp\subsane\SubsonicPlayer\SubsonicAPI\obj\Release\SubsonicAPI.pdb
+D:\temp\subsane\SubsonicPlayer\SubsonicAPI\obj\Release\SubsonicAPI.csprojResolveAssemblyReference.cache
