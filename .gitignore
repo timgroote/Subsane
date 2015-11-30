@@ -11,3 +11,4 @@ SubSane/SubsonicRegfile.nfo
 /subsane/bin/Release/SubSane.vshost.exe.config
 SubSane/bin/Debug/SubsonicRegfile.nfo
 SubSane/obj/
+SubsonicAPI/obj/
