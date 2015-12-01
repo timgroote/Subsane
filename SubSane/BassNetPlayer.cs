@@ -10,8 +10,6 @@ namespace SubSane
 {    
     public class BassNetPlayer : IPlayer
     {
-        private int BassNetChannel;
-
         private int CurrentSongChannel;
 
         public class SongFinishedEventArgs : EventArgs

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.IO;
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Xml;
 
 namespace SubsonicAPI
@@ -35,7 +37,7 @@ namespace SubsonicAPI
         /// <param name="user"></param>
         /// <param name="password"></param>
         /// <returns>Resulting XML (Future boolean)</returns>
-        public static string LogIn(string theServer, string user, string password)
+        public static LoginResult LogIn(string theServer, string user, string password)
         {
             string result = "Nothing Happened";
 
@@ -45,13 +47,26 @@ namespace SubsonicAPI
 
             Stream theStream = MakeGenericRequest("ping", null);
 
-            StreamReader sr = new StreamReader(theStream);
+            try
+            {
+                using (StreamReader sr = new StreamReader(theStream))
+                {
+                    string res = sr.ReadToEnd();
 
-            result = sr.ReadToEnd();
-
-            /// TODO: Parse the result and determine if logged in or not
-
-            return result;
+                    // Parse the resulting XML string into an XmlDocument
+                    XmlDocument myXml = new XmlDocument();
+                    myXml.LoadXml(res);
+                    if (myXml.ChildNodes[1].Name == "subsonic-response")
+                    {
+                        return LoginResult.FromXml(myXml.ChildNodes[1]);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                  //todo : log exception
+            }
+            return new LoginResult(false, "exception!");
         }
 
         /// <summary>
@@ -64,7 +79,7 @@ namespace SubsonicAPI
         public static Stream MakeGenericRequest(string method, Dictionary<string, string> parameters)
         {
             // Check to see if Logged In yet
-            if (string.IsNullOrEmpty(authHeader))
+            if (String.IsNullOrEmpty(authHeader))
             {
                 // Throw a Not Logged In exception
                 Exception e = new Exception("No Authorization header.  Must Log In first");
@@ -152,10 +167,10 @@ namespace SubsonicAPI
         {
             // Load the parameters if provided
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            if (!string.IsNullOrEmpty(musicFolderId))
+            if (!String.IsNullOrEmpty(musicFolderId))
                 parameters.Add("musicFolderId", musicFolderId);
 
-            if (!string.IsNullOrEmpty(ifModifiedSince))
+            if (!String.IsNullOrEmpty(ifModifiedSince))
                 parameters.Add("ifModifiedSince", ifModifiedSince);
 
             // Make the request
@@ -205,7 +220,7 @@ namespace SubsonicAPI
         public static Stream StreamSong(string id, int? maxBitRate = null)
         {
             // Reades the id of the song and sets it as a parameter
-            Dictionary<string, string> theParameters = new Dictionary<string,string>();
+            Dictionary<string, string> theParameters = new Dictionary<string, string>();
             theParameters.Add("id", id);
             if (maxBitRate.HasValue)
                 theParameters.Add("maxBitRate", maxBitRate.ToString());
@@ -283,23 +298,40 @@ namespace SubsonicAPI
                     int i = 0;
                     for (i = 0; i < myXML.ChildNodes[1].FirstChild.ChildNodes.Count; i++)
                     {
-                        bool isDir = bool.Parse(myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["isDir"].Value);
+                        bool isDir = Boolean.Parse(myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["isDir"].Value);
                         
                         if (isDir)
                             theFolder.AddFolder(MusicFolder.FromXml(myXML.ChildNodes[1].FirstChild.ChildNodes[i]));
                         else
-                            theFolder.AddSong(Song.FromXml(myXML.ChildNodes[1].FirstChild.ChildNodes[1]));
+                            theFolder.AddSong(Song.FromXml(myXML.ChildNodes[1].FirstChild.ChildNodes[i]));
                     }
                 }
             }
 
             return theFolder;
         }
-		
-		/// <summary>
-		/// Returns what is currently being played by all users. Takes no extra parameters. 
-		/// </summary>
-		public static Dictionary<String, Song> GetNowPlaying()
+
+        public static Dictionary<string, string> ListAlbums(string artistId)
+        {
+            return GetMusicDirectory(artistId).Folders.Where(f => f.ItemType == SubsonicItemType.Folder).Select(fd => new KeyValuePair<string, string>(fd.Name, fd.Id)).ToDictionary(r => r.Key, r => r.Value);
+        }
+
+        public static IEnumerable<string> GetAlbumIds(string artistId)
+        {
+            MusicFolder folderContents = Subsonic.GetMusicDirectory(artistId);
+            return folderContents.Folders.Select(mf => mf.Id);
+        }
+
+        public static IEnumerable<Song> ListSongsByAlbumId(string albumId)
+        {
+            MusicFolder albumContens = Subsonic.GetMusicDirectory(albumId);
+            return albumContens.Songs;
+        }
+
+        /// <summary>
+        /// Returns what is currently being played by all users. Takes no extra parameters. 
+        /// </summary>
+        public static Dictionary<string, Song> GetNowPlaying()
 		{
             #region example data
             //EXAMPLE DATA
@@ -332,7 +364,7 @@ namespace SubsonicAPI
             //</ subsonic - response >\n"
             #endregion
 
-            Dictionary <String, Song> nowPlaying = new Dictionary<string, Song>();
+            Dictionary<string, Song> nowPlaying = new Dictionary<string, Song>();
 			
 			Dictionary<string, string> theParameters = new Dictionary<string, string>();
 			Stream theStream = MakeGenericRequest("getNowPlaying", theParameters);
@@ -362,5 +394,4 @@ namespace SubsonicAPI
 		    return nowPlaying;
 		}
     }
-
 }

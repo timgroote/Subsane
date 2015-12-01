@@ -29,11 +29,11 @@ namespace SubSane.CliCommands
             {
                 if (plSong != null)
                 {
-                    Utils.UOut(ConsoleColor.Yellow, plSong.ToString());
+                    ConsoleUtils.UOut(ConsoleColor.Yellow, plSong.ToString());
                 }
                 else
                 {
-                    Utils.UOut(ConsoleColor.Red, "NULL <-- this should not happen. fix please");
+                    ConsoleUtils.UOut(ConsoleColor.Red, "NULL <-- this should not happen. fix please");
                 }
             }
         }

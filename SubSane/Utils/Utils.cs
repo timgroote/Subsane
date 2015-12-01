@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SubSane.ConsoleForms
 {
-    public static class Utils
+    public static class ConsoleUtils
     {
         public static void UOut(ConsoleColor foregroundColor, string message, ConsoleColor backgroundColor = ConsoleColor.Black, params object[] formatParams)
         {
