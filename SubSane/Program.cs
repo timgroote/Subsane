@@ -302,13 +302,20 @@ partymode
 dumbmode
     dumb mode : stop after playlist gets empty.
 
+clear
+    clears the play queue
+
 anco
-    Tries to look for 'up to my neck in you' by AC/DC and enqueues it if found
+    Tries to look for 'up to my neck in you' by AC/DC and enqueues it if found (not implemented yet)
 
 ?
 	show this list");
                         break;
 
+                    case "clear":
+                        ConsoleUtils.UOut(ConsoleColor.Green, "clearing playlist");
+                        ThePlayer.PlayList.Clear();
+                        break;
                     case "exit":
                         ConsoleUtils.UOut(ConsoleColor.Green, "ok, bye :)");
                         exitProgram = true;

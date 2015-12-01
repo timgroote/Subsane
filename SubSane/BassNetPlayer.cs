@@ -99,12 +99,21 @@ namespace SubSane
                 {
                     CurrentSong = PlayList.Peek();
                 }
-
+                if (!CurrentSong.IsPlayable || (!Config.Instance.PlayWavs && CurrentSong.FileType.ToLowerInvariant() == "wav"))
+                {
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Out.WriteLine("cannot play song. skipping.");
+                    Console.ResetColor();
+                    Skip();
+                    return;
+                }
                 
                 State = PlayState.Playing;
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.Out.WriteLine("downloading...");
+                //todo : this should happen in a background thread.
                 byte[] songBytes = Subsonic.PreloadSong(CurrentSong.Id);
                 _hgcFile = GCHandle.Alloc(songBytes, GCHandleType.Pinned);
                 Console.ForegroundColor = ConsoleColor.DarkRed;

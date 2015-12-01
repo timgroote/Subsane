@@ -71,6 +71,7 @@
     <Compile Include="CliCommands\Random.cs" />
     <Compile Include="CliCommands\Skip.cs" />
     <Compile Include="CliCommands\Stop.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="ConsoleForms\ConsoleForm.cs" />
     <Compile Include="ConsoleForms\IConsoleFormElement.cs" />
     <Compile Include="ConsoleForms\Label.cs" />

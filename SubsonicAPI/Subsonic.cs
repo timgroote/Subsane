@@ -148,7 +148,8 @@ namespace SubsonicAPI
                             myXML.ChildNodes[1].FirstChild.Attributes["title"].Value,
                             myXML.ChildNodes[1].FirstChild.Attributes["id"].Value,
                             myXML.ChildNodes[1].FirstChild.Attributes["artist"].Value,
-                            myXML.ChildNodes[1].FirstChild.Attributes["album"].Value
+                            myXML.ChildNodes[1].FirstChild.Attributes["album"].Value,
+                            myXML.ChildNodes[1].FirstChild.Attributes["suffix"].Value
                             );
                     }
                 }
@@ -384,7 +385,8 @@ namespace SubsonicAPI
                             childnode.Attributes["artist"].Value, 
                             childnode.Attributes["album"].Value, 
                             childnode.Attributes["title"].Value,
-                            childnode.Attributes["id"].Value
+                            childnode.Attributes["id"].Value,
+                            childnode.Attributes["suffix"].Value
                         );
                         
 		                nowPlaying.Add(user + childnode.Attributes["playerId"].Value, sg);
