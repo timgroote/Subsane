@@ -1,3 +1,5 @@
+using SubSane.Players;
+
 namespace SubSane.CliCommands
 {
     public class Pause : CliCommandType
@@ -6,6 +8,11 @@ namespace SubSane.CliCommands
 
         public Pause(string input) : base(input)
         {
+        }
+
+        public override string Description
+        {
+            get { return "pause or resume playback"; }
         }
 
         public override string[] CallStrings

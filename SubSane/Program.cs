@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using SubsonicAPI;
 using SubSane.ConsoleForms;
+using SubSane.Players;
 using SubSane.SubSaneConsoleForms;
 using Un4seen.Bass;
 
@@ -100,9 +101,9 @@ namespace SubSane
                 switch (Argument)
                 {
                     case "play":
-                        if (ThePlayer.PlayList.Count > 0)
+                        if (ThePlayer.PlayQueue.Count > 0)
                         {
-                            ConsoleUtils.UOut(ConsoleColor.Black, "Now playing : {0}", ConsoleColor.White, ThePlayer.PlayList.Peek());
+                            ConsoleUtils.UOut(ConsoleColor.Black, "Now playing : {0}", ConsoleColor.White, ThePlayer.PlayQueue.Peek());
                             Play();
                         }
                         else
@@ -143,7 +144,7 @@ namespace SubSane
 
 
                     case "queue":
-                        foreach (var queueditem in ThePlayer.PlayList)
+                        foreach (var queueditem in ThePlayer.PlayQueue)
                         {
                             if (queueditem != null)
                             {
@@ -235,7 +236,7 @@ namespace SubSane
 
                     case "partymode":
                         mode = PlayMode.Party;
-                        while (ThePlayer.PlayList.Count < 10)
+                        while (ThePlayer.PlayQueue.Count < 10)
                         {
                             Song rsong = GetRandomSong();
                             if (rsong == null)
@@ -246,7 +247,7 @@ namespace SubSane
 
                             if (rsong?.Name != null && rsong.Id != null)
                             {
-                                ThePlayer.PlayList.Enqueue(rsong);
+                                ThePlayer.PlayQueue.Enqueue(rsong);
                             }
 
                         }
@@ -314,7 +315,7 @@ anco
 
                     case "clear":
                         ConsoleUtils.UOut(ConsoleColor.Green, "clearing playlist");
-                        ThePlayer.PlayList.Clear();
+                        ThePlayer.PlayQueue.Clear();
                         break;
                     case "exit":
                         ConsoleUtils.UOut(ConsoleColor.Green, "ok, bye :)");
@@ -334,7 +335,7 @@ anco
         {
             if (mode == PlayMode.Party)
             {
-                while (ThePlayer.PlayList.Count < 10)
+                while (ThePlayer.PlayQueue.Count < 10)
                 {
                     Song randomSong = GetRandomSong();
                     if (randomSong == null || randomSong.Id == null || randomSong.Name == null)
@@ -342,12 +343,12 @@ anco
                         ConsoleUtils.UOut(ConsoleColor.Red,"attempted to add a null song. song not added");
                         continue;
                     }
-                    ThePlayer.PlayList.Enqueue(randomSong);
+                    ThePlayer.PlayQueue.Enqueue(randomSong);
                 }
             }
-            if (ThePlayer.PlayList.Count > 0)
+            if (ThePlayer.PlayQueue.Count > 0)
             {
-                ConsoleUtils.UOut(ConsoleColor.Black, "Now playing : {0}", ConsoleColor.White, ThePlayer.PlayList.Peek().Name);
+                ConsoleUtils.UOut(ConsoleColor.Black, "Now playing : {0}", ConsoleColor.White, ThePlayer.PlayQueue.Peek().Name);
             }
         }
                   
@@ -410,7 +411,7 @@ anco
         private static void GetArtists()
         {
             ConsoleUtils.UOut(ConsoleColor.Yellow, "Loading (artists)");
-            Artists = Subsonic.GetIndexes();
+            Artists = Subsonic.GetArtistIndexes();
             ConsoleUtils.UOut(ConsoleColor.Yellow, "Done Loading (artists)");
         }
         

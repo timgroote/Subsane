@@ -1,4 +1,4 @@
-﻿namespace SubSane
+﻿namespace SubSane.Players
 {
     public enum PlayMode
     {

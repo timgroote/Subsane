@@ -6,11 +6,11 @@ using System.Threading;
 using SubsonicAPI;
 using Un4seen.Bass;
 
-namespace SubSane
+namespace SubSane.Players
 {    
     public class BassNetPlayer : IPlayer
     {
-        private int CurrentSongChannel;
+        private int _currentSongChannel;
 
         public class SongFinishedEventArgs : EventArgs
         {
@@ -19,7 +19,7 @@ namespace SubSane
 
         public event EventHandler<SongFinishedEventArgs> SongFinished;
 
-        private void onSongfinished()
+        private void OnSongfinished()
         {
             EventHandler<SongFinishedEventArgs> handler = SongFinished;
             if (handler != null)
@@ -29,16 +29,18 @@ namespace SubSane
         }
 
         public PlayState State { get; private set; }
-        public Song CurrentSong { get; private set; }
-        private Thread playThread;
+        
+        private Thread _playThread;
 
         GCHandle _hgcFile;
 
-        public Queue<Song> PlayList { get; private set; }
+        private Queue<Song> PlayedSongs { get; set; }
+        public Song CurrentSong { get; private set; }
+        public Queue<Song> PlayQueue { get; private set; }
 
         public BassNetPlayer()
         {
-            PlayList = new Queue<Song>();
+            PlayQueue = new Queue<Song>();
             Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
         }
 
@@ -46,18 +48,24 @@ namespace SubSane
         {
             if (song == null) return; //do not accept null.
 
-            PlayList.Enqueue(song);
+            PlayQueue.Enqueue(song);
         }
 
+        public Song GetCurrentSong()
+        {
+            return CurrentSong;
+        }
+
+        
         public int ProgressPercentage
         {
             get
             {
                 if (State == PlayState.Playing)
                 {
-                    float percentage = ((float)Bass.BASS_ChannelGetPosition(CurrentSongChannel) / (float)Bass.BASS_ChannelGetLength(CurrentSongChannel)) * 100f;
+                    float percentage = ((float)Bass.BASS_ChannelGetPosition(_currentSongChannel) / (float)Bass.BASS_ChannelGetLength(_currentSongChannel)) * 100f;
 
-                    return (Int32) Math.Round(percentage);
+                    return (int) Math.Round(percentage);
                 }
                 return 0;
             }
@@ -70,21 +78,22 @@ namespace SubSane
                 Stop();
             }
 
-            if (playThread == null)
+            if (_playThread == null)
             {
-                  playThread = new Thread(new ThreadStart(ProgressThread));
+                  _playThread = new Thread(new ThreadStart(ProgressThread));
             }
 
             if (State == PlayState.Paused)
             {
                 Pause();
             }
-            else if (PlayList.Count > 0)
+            else if (PlayQueue.Count > 0)
             {
                 State = PlayState.Playing;
                 if (CurrentSong == null)
                 {
-                    CurrentSong = PlayList.Dequeue();
+                    CurrentSong = PlayQueue.Dequeue();
+                    PlayedSongs.Enqueue(CurrentSong);
                 }
             }
             else
@@ -93,11 +102,11 @@ namespace SubSane
                 Stop();
             }
             
-            if (this.State == PlayState.Playing)
+            if (State == PlayState.Playing)
             {
                 if (CurrentSong == null)
                 {
-                    CurrentSong = PlayList.Peek();
+                    CurrentSong = PlayQueue.Peek();
                 }
                 if (!CurrentSong.IsPlayable || (!Config.Instance.PlayWavs && CurrentSong.FileType.ToLowerInvariant() == "wav"))
                 {
@@ -119,17 +128,17 @@ namespace SubSane
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.Out.WriteLine("download complete. playing");
                 Console.ForegroundColor = ConsoleColor.White;
-                CurrentSongChannel = Bass.BASS_StreamCreateFile(_hgcFile.AddrOfPinnedObject(), 0, songBytes.Length, BASSFlag.BASS_SAMPLE_FLOAT);
-                Bass.BASS_ChannelPlay(CurrentSongChannel, false);
+                _currentSongChannel = Bass.BASS_StreamCreateFile(_hgcFile.AddrOfPinnedObject(), 0, songBytes.Length, BASSFlag.BASS_SAMPLE_FLOAT);
+                Bass.BASS_ChannelPlay(_currentSongChannel, false);
                 Console.ResetColor();
-                if (!playThread.IsAlive)
+                if (!_playThread.IsAlive)
                 {
-                    if (playThread.ThreadState == ThreadState.Running)
+                    if (_playThread.ThreadState == ThreadState.Running)
                     {
-                        playThread.Join();
+                        _playThread.Join();
                     }
-                    playThread = new Thread(new ThreadStart(ProgressThread));
-                    playThread.Start();
+                    _playThread = new Thread(new ThreadStart(ProgressThread));
+                    _playThread.Start();
                 }
             }
 
@@ -139,12 +148,12 @@ namespace SubSane
         {
             if (State == PlayState.Playing)
             {
-                Bass.BASS_ChannelPause(CurrentSongChannel);
+                Bass.BASS_ChannelPause(_currentSongChannel);
                 State = PlayState.Paused;
             }
             else if (State == PlayState.Paused)
             {
-                Bass.BASS_ChannelPlay(CurrentSongChannel, false);
+                Bass.BASS_ChannelPlay(_currentSongChannel, false);
                 State = PlayState.Playing;
             }
 
@@ -152,7 +161,7 @@ namespace SubSane
                     
         public void Stop()
         {
-            Bass.BASS_ChannelStop(CurrentSongChannel);
+            Bass.BASS_ChannelStop(_currentSongChannel);
 
             if(_hgcFile.IsAllocated)
                 _hgcFile.Free();
@@ -161,11 +170,12 @@ namespace SubSane
         }  
                                          
         private void ProgressThread()
-        {                                                     
-            while (Bass.BASS_ChannelIsActive(CurrentSongChannel) == BASSActive.BASS_ACTIVE_PLAYING || Bass.BASS_ChannelIsActive(CurrentSongChannel) == BASSActive.BASS_ACTIVE_PAUSED)
+        {
+            int progress = 0;
+
+            while (Bass.BASS_ChannelIsActive(_currentSongChannel) == BASSActive.BASS_ACTIVE_PLAYING || Bass.BASS_ChannelIsActive(_currentSongChannel) == BASSActive.BASS_ACTIVE_PAUSED || State == PlayState.Playing)
             {
-                int progress = ProgressPercentage;
-                
+                progress = ProgressPercentage;   
                 Thread.Sleep(1000);
                 if (progress >= 100)
                 {
@@ -176,21 +186,27 @@ namespace SubSane
 
         public void Skip()
         {
-            if (PlayList.Count == 0)
+            if (PlayQueue.Count == 0)
             {
                 Stop(); //no more songs
                 return;
             }
 
             Stop();
-            onSongfinished();
-            CurrentSong = PlayList.Dequeue();
+            OnSongfinished();
+            CurrentSong = PlayQueue.Dequeue();
+            PlayedSongs.Enqueue(CurrentSong);
             Play();
         }
 
+        public List<Song> GetPlayedSongs()
+        {
+            return PlayedSongs.ToList();
+        } 
+
         public List<Song> GetQueue()
         {
-            return PlayList.ToList();
+            return PlayQueue.ToList();
         }
     }
 }

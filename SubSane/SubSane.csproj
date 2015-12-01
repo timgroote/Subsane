@@ -62,14 +62,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BassNetPlayer.cs" />
+    <Compile Include="Players\BassNetPlayer.cs" />
     <Compile Include="CliCommands\CliCommandType.cs" />
     <Compile Include="CliCommands\Help.cs" />
+    <Compile Include="CliCommands\AddSong.cs" />
+    <Compile Include="CliCommands\ListSongs.cs" />
+    <Compile Include="CliCommands\ListAlbums.cs" />
     <Compile Include="CliCommands\Pause.cs" />
     <Compile Include="CliCommands\Play.cs" />
     <Compile Include="CliCommands\PlayList.cs" />
-    <Compile Include="CliCommands\Random.cs" />
+    <Compile Include="CliCommands\AddRandomSong.cs" />
     <Compile Include="CliCommands\Skip.cs" />
+    <Compile Include="CliCommands\Info.cs" />
     <Compile Include="CliCommands\Stop.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ConsoleForms\ConsoleForm.cs" />
@@ -83,9 +87,9 @@
     <Compile Include="ConsoleForms\Textbox.cs" />
     <Compile Include="ConsoleForms\Textboxes.cs" />
     <Compile Include="Utils\Utils.cs" />
-    <Compile Include="IPlayer.cs" />
-    <Compile Include="PlayMode.cs" />
-    <Compile Include="PlayState.cs" />
+    <Compile Include="Players\IPlayer.cs" />
+    <Compile Include="Players\PlayMode.cs" />
+    <Compile Include="Players\PlayState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubSaneConsoleForms\LoginForm.cs" />
@@ -124,6 +128,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,3 +1,5 @@
+using SubSane.Players;
+
 namespace SubSane.CliCommands
 {
     public class Play : CliCommandType
@@ -7,6 +9,11 @@ namespace SubSane.CliCommands
 
         public Play(string input) : base(input)
         {
+        }
+
+        public override string Description
+        {
+            get { return "begins playing, or resumes if paused"; }
         }
 
         public override string[] CallStrings

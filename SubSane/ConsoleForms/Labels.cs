@@ -7,9 +7,8 @@ namespace SubSane.ConsoleForms {
     /// <summary>
     /// A collection class of <see cref="Label">Label</see> objects.
     /// </summary>
-    public class Labels : IEnumerable,
-                          IXmlSerializable,
-                          IDisposable {
+    public class Labels : IEnumerable, IXmlSerializable
+    {
         #region Private Members
         private List<Label> _labels = new List<Label>();    // The container of the Label objects.
         #endregion
@@ -26,7 +25,7 @@ namespace SubSane.ConsoleForms {
         /// Property to return the number of <see cref="Label">Label</see> objects currently
         /// in the collection.
         /// </summary>
-        public Int32 Count { get { return _labels.Count; } }
+        public int Count { get { return _labels.Count; } }
         #endregion
 
         #region Internal Methods
@@ -63,7 +62,7 @@ namespace SubSane.ConsoleForms {
         /// <summary>
         /// Get a <see cref="Label">Label</see> in the collection based on it's index.
         /// </summary>
-        public Label	this[Int32		index] {
+        public Label	this[int		index] {
             get {
                 return _labels[index];
             }
@@ -120,22 +119,7 @@ namespace SubSane.ConsoleForms {
                 reader.Read();
         }
         #endregion
-
-        #region IDisposable Members
-        /// <summary>
-        /// Releases all resources used by this <see cref="Labels">Labels</see>
-        /// object.
-        /// </summary>
-        public void Dispose() {
-            foreach(IDisposable label in _labels)
-                label.Dispose();
-
-            _labels.Clear();
-
-            GC.SuppressFinalize(this);
-        }
-        #endregion
-
+        
         #region IEnumerable Members
         /// <summary>
         /// Returns an enumerator that can iterate through the collection of
@@ -155,7 +139,7 @@ namespace SubSane.ConsoleForms {
         private class LabelEnumerator : IEnumerator {
             #region Private Members
             private     List<Label> _labels = null;
-            private     Int32       _pointer = -1;
+            private     int       _pointer = -1;
             #endregion
 
             #region ctors

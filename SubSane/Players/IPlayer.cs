@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using SubsonicAPI;
 
-namespace SubSane
+namespace SubSane.Players
 {
     public interface IPlayer
     {
@@ -15,5 +11,8 @@ namespace SubSane
         void Skip();
 
         List<Song> GetQueue();
+        void AddSong(Song newSong);
+        Song GetCurrentSong();
+        int ProgressPercentage { get;}
     }
 }

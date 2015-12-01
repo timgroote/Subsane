@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SubsonicAPI;
 using SubSane.ConsoleForms;
+using SubSane.Players;
 
 namespace SubSane.CliCommands
 {
@@ -16,6 +17,11 @@ namespace SubSane.CliCommands
             "queue",
             "getqueue"
         };
+
+        public override string Description
+        {
+            get { return "shows the current playlist"; }
+        }
 
         public override string[] CallStrings {
             get

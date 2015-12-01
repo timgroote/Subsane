@@ -1,27 +1,32 @@
 using System;
 using System.Xml.Serialization;
 
-namespace SubSane.ConsoleForms {
+namespace SubSane.ConsoleForms
+{
     /// <summary>
     /// The base class for textual information displayed by the console.
     /// </summary>
-    public abstract class StdConsoleObject : System.Xml.Serialization.IXmlSerializable,
-                                             IDisposable {
-
+    public abstract class StdConsoleObject : System.Xml.Serialization.IXmlSerializable, IDisposable
+    {
         #region Private Member Variables
-        private     ConsoleColor _foreground;
-        private     ConsoleColor _background;
 
-        private     Point       _location      = new Point();
+        private ConsoleColor _foreground;
+        private ConsoleColor _background;
 
-        private     string      _name          = string.Empty;
-        private     Int32       _length        = 0;
-        protected   bool        _rendered      = false;
-        protected   string      _text          = string.Empty;
+        private Point _location = new Point();
+
+        private string _name = string.Empty;
+        private int _length = 0;
+        protected bool _rendered = false;
+        protected string _text = string.Empty;
+
         #endregion
-		
+
         #region ctors
-        internal StdConsoleObject() { }
+
+        internal StdConsoleObject()
+        {
+        }
 
         /// <summary>
         /// Constructor called when the Name, Location and Length of the StdConsoleObject are known
@@ -32,11 +37,9 @@ namespace SubSane.ConsoleForms {
         /// <param name="location">A <see cref="Point">Point</see> object that describes
         /// where on the console screen the <see cref="StdConsoleObject">StdConsoleObject</see>
         /// should be rendered.</param>
-        /// <param name="length">The length of the field as an <see cref="Int32">Int32</see>.</param>
-        public		StdConsoleObject
-                    (string      name,
-                     Point       location,
-                     Int32       length) {
+        /// <param name="length">The length of the field as an <see cref="int">int</see>.</param>
+        public StdConsoleObject(string name, Point location, int length)
+        {
             _name = name;
             _location = location;
             _length = length;
@@ -49,14 +52,11 @@ namespace SubSane.ConsoleForms {
         /// <param name="name">The name of the StdConsoleObject for accessing it in its collection.</param>
         /// <param name="location">A <see cref="Point">Point</see> object that describes
         /// where on the console screen the StdConsoleObject should be rendered.</param>
-        /// <param name="length">The length of the field as an <see cref="Int32">Int32</see>.</param>
+        /// <param name="length">The length of the field as an <see cref="int">int</see>.</param>
         /// <param name="text">A string specifying the text the <see cref="StdConsoleObject">StdConsoleObject</see>.
         /// will display.</param>
-        public      StdConsoleObject
-                    (string         name, 
-                     Point          location,
-                     Int32          length, 
-                     string         text) : this(name, location, length) {
+        public StdConsoleObject(string name, Point location, int length, string text) : this(name, location, length)
+        {
             _text = text;
         }
 
@@ -69,7 +69,7 @@ namespace SubSane.ConsoleForms {
         /// accessing it in its collection.</param>
         /// <param name="location">A <see cref="Point">Point</see> object that describes
         /// where on the console screen the label should be rendered.</param>
-        /// <param name="length">The length of the field as an <see cref="Int32">Int32</see>.</param>
+        /// <param name="length">The length of the field as an <see cref="int">int</see>.</param>
         /// <param name="text">A string specifying the text the <see cref="Label">Label</see>
         /// will display.</param>
         /// <param name="foreground">A <see cref="StdConsoleObject">ConsoleColor</see> enumeration
@@ -78,63 +78,74 @@ namespace SubSane.ConsoleForms {
         /// <param name="background">A <see cref="StdConsoleObject">ConsoleColor</see> enumeration
         /// describing the background colour of the of the 
         /// <see cref="Label">StdConsoleObject</see>.</param>
-        public      StdConsoleObject
-                    (string name,
-                     Point location,
-                     Int32 length,
-                     string text,
-                     ConsoleColor foreground,
-                     ConsoleColor background) : this(name, location, length, text) {
+        public StdConsoleObject
+            (string name,
+                Point location,
+                int length,
+                string text,
+                ConsoleColor foreground,
+                ConsoleColor background) : this(name, location, length, text)
+        {
             _foreground = foreground;
             _background = background;
         }
+
         #endregion
 
         #region Public Properties
+
         /// <summary>
         /// The colour data used to render the foreground of the text.
         /// </summary>
-        public ConsoleColor Foreground {
-            get {return _foreground;}
-            set {_foreground = value;}
+        public ConsoleColor Foreground
+        {
+            get { return _foreground; }
+            set { _foreground = value; }
         }
-		
+
         /// <summary>
         /// The colour data used to display the background of the text.
         /// </summary>
-        public ConsoleColor Background {
-            get {return _background;}
-            set {_background = value;}
+        public ConsoleColor Background
+        {
+            get { return _background; }
+            set { _background = value; }
         }
-		
+
         /// <summary>
         /// A location for the field on the console.
         /// </summary>
-        public		Point   Location {
-            get {return _location;}
+        public Point Location
+        {
+            get { return _location; }
         }
-		
+
         /// <summary>
         /// The name of the console object, used to access it programmatically
         /// in a collection.
         /// </summary>
-        public  string      Name {
-            get {return _name;}
+        public string Name
+        {
+            get { return _name; }
         }
-		
+
         /// <summary>
         /// The text to be displayed.
         /// </summary>
-        public  string      Text {
-            get {return _text;}
-            set {
-                if (_text != value) {
+        public string Text
+        {
+            get { return _text; }
+            set
+            {
+                if (_text != value)
+                {
                     _text = value;
 
-                    if (_rendered) {
+                    if (_rendered)
+                    {
                         // Mark the starting position and colour of the console.
-                        Int32 x = Console.CursorLeft;
-                        Int32 y = Console.CursorTop;
+                        int x = Console.CursorLeft;
+                        int y = Console.CursorTop;
 
                         ConsoleColor fore = Console.ForegroundColor;
                         ConsoleColor back = Console.BackgroundColor;
@@ -161,47 +172,55 @@ namespace SubSane.ConsoleForms {
                         Console.SetCursorPosition(x, y);
 
                         if (this is Textbox)
-                            if (((Textbox)this).Focus)
+                            if (((Textbox) this).Focus)
                                 Console.SetCursorPosition(_location.X + _text.Length, _location.Y);
                     }
                 }
             }
         }
-		
+
         /// <summary>
         /// The maximum length of the field to be shown.
         /// </summary>
-        public  Int32       Length {
-            get {return _length;}
+        public int Length
+        {
+            get { return _length; }
         }
+
         #endregion
 
         #region Internal Methods
-        internal void Rendered() {
+
+        internal void Rendered()
+        {
             _rendered = true;
         }
+
         #endregion
 
         #region IXmlSerializable Members
+
         /// <summary>
         /// Writes Xml articulating the current state of the <see cref="StdConsoleObject">StdConsoleObject</see>.</summary>
         /// <param name="writer">The stream to which this object will
         /// be serialized.</param>
-        public void WriteXml(System.Xml.XmlWriter writer) {
-            writer.WriteAttributeString(string.Empty, "Name",        string.Empty, _name);
-            writer.WriteAttributeString(string.Empty, "Text",        string.Empty, _text);
-            writer.WriteAttributeString(string.Empty, "Length",      string.Empty, _length.ToString());
-            writer.WriteAttributeString(string.Empty, "ForeColour",  string.Empty, _foreground.ToString());
-            writer.WriteAttributeString(string.Empty, "BackColour",  string.Empty, _background.ToString());
+        public void WriteXml(System.Xml.XmlWriter writer)
+        {
+            writer.WriteAttributeString(string.Empty, "Name", string.Empty, _name);
+            writer.WriteAttributeString(string.Empty, "Text", string.Empty, _text);
+            writer.WriteAttributeString(string.Empty, "Length", string.Empty, _length.ToString());
+            writer.WriteAttributeString(string.Empty, "ForeColour", string.Empty, _foreground.ToString());
+            writer.WriteAttributeString(string.Empty, "BackColour", string.Empty, _background.ToString());
 
-            ((IXmlSerializable)_location).WriteXml(writer);
+            ((IXmlSerializable) _location).WriteXml(writer);
         }
 
         /// <summary>
         /// Method that returns schema information.  Not yet implemented.
         /// </summary>
         /// <returns></returns>
-        public System.Xml.Schema.XmlSchema GetSchema() {
+        public System.Xml.Schema.XmlSchema GetSchema()
+        {
             // TODO:  Add StdConsoleObject.GetSchema implementation
             return null;
         }
@@ -210,43 +229,48 @@ namespace SubSane.ConsoleForms {
         /// Reads Xml when the <see cref="StdConsoleObject">StdConsoleObject</see> is to be deserialized 
         /// from a stream.</summary>
         /// <param name="reader">The stream from which the object will be deserialized.</param>
-        public void ReadXml(System.Xml.XmlReader reader) {
+        public void ReadXml(System.Xml.XmlReader reader)
+        {
             _name = reader.GetAttribute("Name");
-            _text = (reader.GetAttribute("Text") == null ? string.Empty : reader.GetAttribute("Text"));
-            
-            string   length = reader.GetAttribute("Length");
-            if (length != null && length.Length > 0)
-                _length = Int32.Parse(length);
+            _text = (reader.GetAttribute("Text") ?? string.Empty);
+
+            string length = reader.GetAttribute("Length");
+            if (!string.IsNullOrEmpty(length))
+                _length = int.Parse(length);
             else
                 _length = _text.Length;
 
-            string   foreground  = reader.GetAttribute("ForeColour");
-            if (foreground != null && foreground.Length > 0)
-                _foreground = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), foreground);
+            string foreground = reader.GetAttribute("ForeColour");
+            if (!string.IsNullOrEmpty(foreground))
+                _foreground = (ConsoleColor) Enum.Parse(typeof (ConsoleColor), foreground);
 
-            string   background  = reader.GetAttribute("BackColour");
-            if (background != null && background.Length > 0)
-                _background = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), background);
+            string background = reader.GetAttribute("BackColour");
+            if (!string.IsNullOrEmpty(background))
+                _background = (ConsoleColor) Enum.Parse(typeof (ConsoleColor), background);
 
-            reader.Read();    
+            reader.Read();
 
             if (reader.Name == "Location")
-                ((IXmlSerializable)_location).ReadXml(reader);
+                ((IXmlSerializable) _location).ReadXml(reader);
             else
                 throw new InvalidOperationException("<Location> node missing from " + _name + " node.");
         }
+
         #endregion
 
         #region IDisposable Members
+
         /// <summary>
         /// Releases all resources used by this <see cref="StdConsoleObject">StdConsoleObject</see>
         /// object.
         /// </summary>
-        public void Dispose() {
-            ((IDisposable)_location).Dispose();
+        public void Dispose()
+        {
+            ((IDisposable) _location).Dispose();
 
             GC.SuppressFinalize(this);
         }
+
         #endregion
-   }
+    }
 }

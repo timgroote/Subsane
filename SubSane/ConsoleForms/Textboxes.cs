@@ -26,7 +26,7 @@ namespace SubSane.ConsoleForms {
         /// Property to return the number of Textbox objects contained in
         /// the collection.
         /// </summary>
-        public Int32 Count { get { return _textboxes.Count; } }
+        public int Count { get { return _textboxes.Count; } }
         #endregion
 
         #region Internal Methods
@@ -88,7 +88,7 @@ namespace SubSane.ConsoleForms {
         /// Accessor to return a <see cref="Textbox">Textbox</see> based on
         /// its index in the collection.
         /// </summary>
-        public	Textbox  this[Int32     index] {
+        public	Textbox  this[int     index] {
             get {
                 return _textboxes[index];
             }
@@ -175,7 +175,7 @@ namespace SubSane.ConsoleForms {
         private class TextboxEnumerator : System.Collections.IEnumerator {
             #region Private Members
             private List<Textbox> _textboxes    = null;
-            private Int32         _pointer      = -1;
+            private int         _pointer      = -1;
             #endregion
 
             #region ctors

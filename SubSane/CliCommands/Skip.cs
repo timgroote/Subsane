@@ -1,3 +1,5 @@
+using SubSane.Players;
+
 namespace SubSane.CliCommands
 {
     public class Skip : CliCommandType
@@ -9,6 +11,11 @@ namespace SubSane.CliCommands
 
         public Skip(string input) : base(input)
         {
+        }
+
+        public override string Description
+        {
+            get { return "skip the currently playing song"; }
         }
 
         public override string[] CallStrings

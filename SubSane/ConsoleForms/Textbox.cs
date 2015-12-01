@@ -1,26 +1,32 @@
 using System;
 using System.Xml;
 
-namespace SubSane.ConsoleForms {
+namespace SubSane.ConsoleForms
+{
     /// <summary>
     /// An object used to manage the data necessary to render read-write
     /// objects to the screen.
     /// </summary>
-    public class Textbox : StdConsoleObject, System.Xml.Serialization.IXmlSerializable, IConsoleFormElement {
+    public class Textbox : StdConsoleObject, System.Xml.Serialization.IXmlSerializable, IConsoleFormElement
+    {
         #region Private Members
-        private  ConsoleColor    _DEFAULT_BACKGROUND     = ConsoleColor.White;
-        private  ConsoleColor    _DEFAULT_FOREGROUND     = ConsoleColor.Black;
 
-        private  char            _passwordChar           = char.MinValue;
-        private  bool            _focus                  = false;
+        private ConsoleColor _DEFAULT_BACKGROUND = ConsoleColor.White;
+        private ConsoleColor _DEFAULT_FOREGROUND = ConsoleColor.Black;
+
+        private char _passwordChar = char.MinValue;
+        private bool _focus = false;
+
         #endregion
 
         #region ctors
+
         /// <summary>
         /// Constructor callable by other members of the namespace when a new object is
         /// going to be deserialized into it.
         /// </summary>
-        internal    Textbox() {
+        internal Textbox()
+        {
             this.InitializeColours();
         }
 
@@ -33,11 +39,12 @@ namespace SubSane.ConsoleForms {
         /// <param name="name">The name of the Textbox for accessing it in the Textboxes collection.</param>
         /// <param name="location">A <see cref="Point">Point</see> object that describes
         /// where on the console screen the Textbox should be rendered.</param>
-        /// <param name="length">The length of the field as an <see cref="Int32">Int32</see>.</param>
-        public      Textbox
-                    (string         name,
-                     Point          location,
-                     Int32          length) : base(name, location, length) {
+        /// <param name="length">The length of the field as an <see cref="int">int</see>.</param>
+        public Textbox
+            (string name,
+                Point location,
+                int length) : base(name, location, length)
+        {
             this.InitializeColours();
         }
 
@@ -49,14 +56,15 @@ namespace SubSane.ConsoleForms {
         /// <param name="name">The name of the textbox for accessing it in the collection.</param>
         /// <param name="location">A <see cref="Point">Point</see> object that describes
         /// where on the console screen the label should be rendered.</param>
-        /// <param name="length">The length of the field as an <see cref="Int32">Int32</see>.</param>
+        /// <param name="length">The length of the field as an <see cref="int">int</see>.</param>
         /// <param name="text">A string specifying the text the <see cref="Label">Label</see>
         /// will display.</param>
-        public      Textbox
-                    (string         name,
-                     Point          location,
-                     Int32          length, 
-                     string         text) : base(name, location, length, text) {
+        public Textbox
+            (string name,
+                Point location,
+                int length,
+                string text) : base(name, location, length, text)
+        {
             this.InitializeColours();
         }
 
@@ -69,60 +77,75 @@ namespace SubSane.ConsoleForms {
         /// <param name="name">The name of the Textbox for accessing it in the Textboxes collection.</param>
         /// <param name="location">A <see cref="Point">Point</see> object that describes
         /// where on the console screen the Textbox should be rendered.</param>
-        /// <param name="length">The length of the field as an <see cref="Int32">Int32</see>.</param>
+        /// <param name="length">The length of the field as an <see cref="int">int</see>.</param>
         /// <param name="text">A string specifying the text the <see cref="Textbox">Textbox</see>
         /// will display.</param>
         /// <param name="foreground">A <see cref="ConsoleColor">ConsoleColor</see> enumeration
         /// describing the foreground colour of the text of the <see cref="Textbox">Textbox</see>.</param>
         /// <param name="background">A <see cref="ConsoleColor">ConsoleColor</see> enumeration
         /// describing the background colour of the of the <see cref="Textbox">Textbox</see>.</param>
-        public      Textbox
-                    (string         name,
-                     Point          location,
-                     Int32          length,
-                     string         text, 
-                     ConsoleColor   foreground,
-                     ConsoleColor   background) : base(name, location, length, text, foreground, background) { }
+        public Textbox
+            (string name,
+                Point location,
+                int length,
+                string text,
+                ConsoleColor foreground,
+                ConsoleColor background) : base(name, location, length, text, foreground, background)
+        {
+        }
+
         #endregion
 
         #region Private Methods
-        private	void			InitializeColours() {
+
+        private void InitializeColours()
+        {
             this.Background = _DEFAULT_BACKGROUND;
             this.Foreground = _DEFAULT_FOREGROUND;
         }
+
         #endregion
 
         #region Internal Properties
-        internal bool Focus {
+
+        internal bool Focus
+        {
             get { return _focus; }
             set { _focus = value; }
         }
 
-        internal string NonEventingText {
+        internal string NonEventingText
+        {
             get { return base._text; }
             set { base._text = value; }
         }
+
         #endregion
 
         #region Public Properties
+
         /// <summary>
         /// A <see cref="bool">char</see> that defines the masking
         /// character for a password field.  If undefined, the field
         /// is a regular textbox.
         /// </summary>
-        public      char     PasswordChar {
-            get {return _passwordChar;}
-            set {_passwordChar = value;}
+        public char PasswordChar
+        {
+            get { return _passwordChar; }
+            set { _passwordChar = value; }
         }
+
         #endregion
 
         #region IXmlSerializable Members
+
         /// <summary>
         /// Reads Xml when the <see cref="Textbox">Textbox</see> is to be deserialized 
         /// from a stream.</summary>
         /// <param name="reader">The stream from which the object will be deserialized.</param>
-        void System.Xml.Serialization.IXmlSerializable.ReadXml(XmlReader reader) {
-            string   password    = reader.GetAttribute("PasswordChar");
+        void System.Xml.Serialization.IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            string password = reader.GetAttribute("PasswordChar");
 
             if (password != null)
                 _passwordChar = char.Parse(password);
@@ -134,7 +157,8 @@ namespace SubSane.ConsoleForms {
         /// Writes Xml articulating the current state of the <see cref="Textbox">Textbox</see> object.
         /// </summary>
         /// <param name="writer">The stream to which this object will be serialized.</param>
-        void System.Xml.Serialization.IXmlSerializable.WriteXml(XmlWriter writer) {
+        void System.Xml.Serialization.IXmlSerializable.WriteXml(XmlWriter writer)
+        {
             writer.WriteStartElement(this.GetType().Name);
 
             if (_passwordChar != char.MinValue)
@@ -143,6 +167,7 @@ namespace SubSane.ConsoleForms {
             base.WriteXml(writer);
             writer.WriteEndElement();
         }
+
         #endregion
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SubSane.Players;
 
 namespace SubSane.CliCommands
 {
@@ -12,6 +13,10 @@ namespace SubSane.CliCommands
 
         public Help(string input) : base(input)
         {
+        }
+
+        public override string Description {
+            get { return "shows this list"; }
         }
 
         public override string[] CallStrings {

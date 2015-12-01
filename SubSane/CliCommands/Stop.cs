@@ -1,9 +1,16 @@
+using SubSane.Players;
+
 namespace SubSane.CliCommands
 {
     public class Stop : CliCommandType
     {
         public Stop(string input) : base(input)
         {
+        }
+
+        public override string Description
+        {
+            get { return "stops playback"; }
         }
 
         public override string[] CallStrings

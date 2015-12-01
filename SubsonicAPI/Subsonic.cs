@@ -164,7 +164,7 @@ namespace SubsonicAPI
         /// <param name="musicFolderId">Required: No; If specified, only return artists in the music folder with the given ID.</param>
         /// <param name="ifModifiedSince">Required: No; If specified, only return a result if the artist collection has changed since the given time.</param>
         /// <returns>Dictionary, Key = Artist and Value = id</returns>
-        public static Dictionary<string, string> GetIndexes(string musicFolderId = "", string ifModifiedSince = "")
+        public static Dictionary<string, string> GetArtistIndexes(string musicFolderId = "", string ifModifiedSince = "")
         {
             // Load the parameters if provided
             Dictionary<string, string> parameters = new Dictionary<string, string>();
