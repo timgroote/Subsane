@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using SubsonicAPI;
@@ -7,7 +8,7 @@ using Un4seen.Bass;
 
 namespace SubSane
 {    
-    public class BassNetPlayer
+    public class BassNetPlayer : IPlayer
     {
         private int BassNetChannel;
 
@@ -20,7 +21,7 @@ namespace SubSane
 
         public event EventHandler<SongFinishedEventArgs> SongFinished;
 
-        protected virtual void onSongfinished()
+        private void onSongfinished()
         {
             EventHandler<SongFinishedEventArgs> handler = SongFinished;
             if (handler != null)
@@ -29,7 +30,7 @@ namespace SubSane
             }
         }
 
-        public PlayState State { get; set; }
+        public PlayState State { get; private set; }
         public Song CurrentSong { get; private set; }
         private Thread playThread;
 
@@ -78,7 +79,7 @@ namespace SubSane
 
             if (State == PlayState.Paused)
             {
-                TogglePause();
+                Pause();
             }
             else if (PlayList.Count > 0)
             {
@@ -127,20 +128,21 @@ namespace SubSane
 
         }
 
-        public void TogglePause()
+        public void Pause()
         {
             if (State == PlayState.Playing)
             {
                 Bass.BASS_ChannelPause(CurrentSongChannel);
                 State = PlayState.Paused;
             }
-            else if (State== PlayState.Paused)
+            else if (State == PlayState.Paused)
             {
-                Bass.BASS_ChannelPlay(CurrentSongChannel,false);
+                Bass.BASS_ChannelPlay(CurrentSongChannel, false);
                 State = PlayState.Playing;
             }
-        }
 
+        }
+                    
         public void Stop()
         {
             Bass.BASS_ChannelStop(CurrentSongChannel);
@@ -150,9 +152,7 @@ namespace SubSane
 
             State = PlayState.Stopped;
         }  
-
-
-
+                                         
         private void ProgressThread()
         {                                                     
             while (Bass.BASS_ChannelIsActive(CurrentSongChannel) == BASSActive.BASS_ACTIVE_PLAYING || Bass.BASS_ChannelIsActive(CurrentSongChannel) == BASSActive.BASS_ACTIVE_PAUSED)
@@ -179,6 +179,11 @@ namespace SubSane
             onSongfinished();
             CurrentSong = PlayList.Dequeue();
             Play();
+        }
+
+        public List<Song> GetQueue()
+        {
+            return PlayList.ToList();
         }
     }
 }

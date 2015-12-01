@@ -63,6 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BassNetPlayer.cs" />
+    <Compile Include="CliCommands\CliCommandType.cs" />
+    <Compile Include="CliCommands\Pause.cs" />
+    <Compile Include="CliCommands\Play.cs" />
+    <Compile Include="CliCommands\PlayList.cs" />
+    <Compile Include="CliCommands\Skip.cs" />
+    <Compile Include="CliCommands\Stop.cs" />
     <Compile Include="ConsoleForms\ConsoleForm.cs" />
     <Compile Include="ConsoleForms\IConsoleFormElement.cs" />
     <Compile Include="ConsoleForms\Label.cs" />
@@ -73,7 +79,10 @@
     <Compile Include="ConsoleForms\StdConsoleObject.cs" />
     <Compile Include="ConsoleForms\Textbox.cs" />
     <Compile Include="ConsoleForms\Textboxes.cs" />
+    <Compile Include="ConsoleForms\Utils.cs" />
+    <Compile Include="IPlayer.cs" />
     <Compile Include="LoginResult.cs" />
+    <Compile Include="PlayMode.cs" />
     <Compile Include="PlayState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

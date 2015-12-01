@@ -5,15 +5,10 @@ using System.Linq;
 using SubsonicAPI;
 using SubSane.ConsoleForms;
 using Un4seen.Bass;
+using Utils = SubSane.ConsoleForms.Utils;
 
 namespace SubSane
 {
-    public enum PlayMode
-    {
-        Dumb,
-        Party
-    }
-
     class Program
     {
         public static PlayMode mode = PlayMode.Dumb;
@@ -21,8 +16,6 @@ namespace SubSane
         private static String server;
         private static String user;
         private static String pw;
-
-        private static Boolean IsLoggedIn = false;
 
         private static Random ran = new Random();
 
@@ -158,7 +151,7 @@ namespace SubSane
         {
             Console.ResetColor();
             Console.Clear();
-            UOut(ConsoleColor.Yellow, "K, bye!");
+            Utils.UOut(ConsoleColor.Yellow, "K, bye!");
         }
 
         private static void EnterMainLoop()
@@ -179,12 +172,12 @@ namespace SubSane
                     case "play":
                         if (ThePlayer.PlayList.Count > 0)
                         {
-                            UOut(ConsoleColor.Black, "Now playing : {0}", ConsoleColor.White, ThePlayer.PlayList.Peek());
+                            Utils.UOut(ConsoleColor.Black, "Now playing : {0}", ConsoleColor.White, ThePlayer.PlayList.Peek());
                             Play();
                         }
                         else
                         {
-                            UOut(ConsoleColor.Red, "Nothing in playlist... enter '?' for command list", ConsoleColor.White);
+                            Utils.UOut(ConsoleColor.Red, "Nothing in playlist... enter '?' for command list", ConsoleColor.White);
                         }
                         break;
                     case "skip":
@@ -208,13 +201,13 @@ namespace SubSane
                             }
                             catch (Exception e)
                             {
-                                UOut(ConsoleColor.Red, "cannot read song properties. \r\n{1}\r\n{2}", ConsoleColor.White, e.Message, e.StackTrace);
+                                Utils.UOut(ConsoleColor.Red, "cannot read song properties. \r\n{1}\r\n{2}", ConsoleColor.White, e.Message, e.StackTrace);
                             }
 
                         }
                         else
                         {
-                            UOut(ConsoleColor.Red, "Error getting random song. nothing enqueued.");
+                            Utils.UOut(ConsoleColor.Red, "Error getting random song. nothing enqueued.");
                         }
                         break;
 
@@ -224,11 +217,11 @@ namespace SubSane
                         {
                             if (queueditem != null)
                             {
-                                UOut(ConsoleColor.Yellow, queueditem.ToString());
+                                Utils.UOut(ConsoleColor.Yellow, queueditem.ToString());
                             }
                             else
                             {
-                                UOut(ConsoleColor.Red, "NULL <-- this should not happen. fix please");
+                                Utils.UOut(ConsoleColor.Red, "NULL <-- this should not happen. fix please");
                             }
                         }
                         break;
@@ -236,12 +229,12 @@ namespace SubSane
                     case "whatsplaying":
                         foreach (KeyValuePair<String, Song> p in WhatsPlaying())
                         {
-                            UOut(ConsoleColor.Yellow, "{0} => {1} {2}", ConsoleColor.Black, p.Key, p.Value.Name, p.Value.Id);
+                            Utils.UOut(ConsoleColor.Yellow, "{0} => {1} {2}", ConsoleColor.Black, p.Key, p.Value.Name, p.Value.Id);
                         }
                         break;
 
                     case "listalbums":
-                        UOut(ConsoleColor.Yellow, "Enter artist");
+                        Utils.UOut(ConsoleColor.Yellow, "Enter artist");
                         string artistName = Console.ReadLine();
                         artistName = artistName.ToLowerInvariant();
                         Dictionary<String, string> matchingArtists = new Dictionary<string, string>();
@@ -255,7 +248,7 @@ namespace SubSane
                                 matchingalbums = ListAlbums(artist.Value);
                                 foreach (var album in matchingalbums)
                                 {
-                                    UOut(ConsoleColor.Yellow, "({0}) {1} - {2}", ConsoleColor.Black, artist.Key, album.Key, album.Value);
+                                    Utils.UOut(ConsoleColor.Yellow, "({0}) {1} - {2}", ConsoleColor.Black, artist.Key, album.Key, album.Value);
                                 }
                             }
                         }
@@ -265,12 +258,12 @@ namespace SubSane
                         string albumId = Console.ReadLine();
                         foreach (Song songadong in ListSongsByAlbumId(albumId))
                         {
-                            UOut(ConsoleColor.Yellow, "{0} ({1})", ConsoleColor.Black, songadong.Name, songadong.Id);
+                            Utils.UOut(ConsoleColor.Yellow, "{0} ({1})", ConsoleColor.Black, songadong.Name, songadong.Id);
                         }
                         break;
 
                     case "info":
-                        UOut(ConsoleColor.Black, "Now playing {0}", ConsoleColor.White, ThePlayer.CurrentSong);
+                        Utils.UOut(ConsoleColor.Black, "Now playing {0}", ConsoleColor.White, ThePlayer.CurrentSong);
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Out.Write("[");
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
@@ -296,17 +289,17 @@ namespace SubSane
 
 
                     case "addid":
-                        UOut(ConsoleColor.Green, "enter id and press [enter].");
+                        Utils.UOut(ConsoleColor.Green, "enter id and press [enter].");
                         string id = Console.ReadLine();
                         Song sg = GetSongById(id);
                         if (sg?.Name == null || sg.Id == null)
                         {
-                            UOut(ConsoleColor.Red, "no song found.");
+                            Utils.UOut(ConsoleColor.Red, "no song found.");
                         }
                         else
                         {
                             ThePlayer.AddSong(sg);
-                            UOut(ConsoleColor.Yellow, "Enqueued {0}", ConsoleColor.Black, sg.Name);
+                            Utils.UOut(ConsoleColor.Yellow, "Enqueued {0}", ConsoleColor.Black, sg.Name);
                         }
                         break;
 
@@ -315,6 +308,12 @@ namespace SubSane
                         while (ThePlayer.PlayList.Count < 10)
                         {
                             Song rsong = GetRandomSong();
+                            if (rsong == null)
+                            {
+                                Utils.UOut(ConsoleColor.Red, "attempted to add a null song. song not enqueued");
+                                continue;
+                            }
+
                             if (rsong?.Name != null && rsong.Id != null)
                             {
                                 ThePlayer.PlayList.Enqueue(rsong);
@@ -373,17 +372,20 @@ partymode
 dumbmode
     dumb mode : stop after playlist gets empty.
 
+anco
+    Tries to look for 'up to my neck in you' by AC/DC and enqueues it if found
+
 ?
 	show this list");
                         break;
 
                     case "exit":
-                        UOut(ConsoleColor.Green, "ok, bye :)");
+                        Utils.UOut(ConsoleColor.Green, "ok, bye :)");
                         exitProgram = true;
                         break;
 
                     default:
-                        UOut(ConsoleColor.Red, "not recognised. enter '?' for help.");
+                        Utils.UOut(ConsoleColor.Red, "not recognised. enter '?' for help.");
                         break;
                 }
             }
@@ -397,22 +399,22 @@ dumbmode
             {
                 while (ThePlayer.PlayList.Count < 10)
                 {
-                    ThePlayer.PlayList.Enqueue(GetRandomSong());
+                    Song randomSong = GetRandomSong();
+                    if (randomSong == null || randomSong.Id == null || randomSong.Name == null)
+                    {
+                        Utils.UOut(ConsoleColor.Red,"attempted to add a null song. song not added");
+                        continue;
+                    }
+                    ThePlayer.PlayList.Enqueue(randomSong);
                 }
             }
             if (ThePlayer.PlayList.Count > 0)
             {
-                UOut(ConsoleColor.Black, "Now playing : {0}", ConsoleColor.White, ThePlayer.PlayList.Peek().Name);
+                Utils.UOut(ConsoleColor.Black, "Now playing : {0}", ConsoleColor.White, ThePlayer.PlayList.Peek().Name);
             }
         }
 
-        private static void UOut(ConsoleColor foregroundColor, string message, ConsoleColor backgroundColor = ConsoleColor.Black, params object[] formatParams)
-        {
-            Console.ForegroundColor = foregroundColor;
-            Console.BackgroundColor = backgroundColor;
-            Console.Out.WriteLine(message, formatParams);
-            Console.ResetColor();
-        }
+        
 
 
 
@@ -426,7 +428,7 @@ dumbmode
         {
             if (e.Cancel || sender.Textboxes["txtServer"].Text == null)
             {
-                UOut(ConsoleColor.Yellow, "K, bye!");
+                Utils.UOut(ConsoleColor.Yellow, "K, bye!");
                 return;
             }
 
@@ -487,9 +489,9 @@ dumbmode
 
         private static void GetArtists()
         {
-            UOut(ConsoleColor.Yellow, "Loading (artists)");
+            Utils.UOut(ConsoleColor.Yellow, "Loading (artists)");
             Artists = Subsonic.GetIndexes();
-            UOut(ConsoleColor.Yellow, "Done Loading (artists)");
+            Utils.UOut(ConsoleColor.Yellow, "Done Loading (artists)");
         }
 
 
@@ -508,7 +510,7 @@ dumbmode
 
         private static void Pause()
         {
-            ThePlayer.TogglePause();
+            ThePlayer.Pause();
         }
 
         private static void Skip()
