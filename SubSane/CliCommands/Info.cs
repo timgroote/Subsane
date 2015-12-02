@@ -42,6 +42,7 @@ namespace SubSane.CliCommands
             Console.ForegroundColor = ConsoleColor.White;
             Console.Out.Write("]");
             Console.ResetColor();
+            Console.Out.Flush();
             Console.Out.WriteLine();
         }
     }

@@ -39,7 +39,7 @@ namespace SubSane.CliCommands
                 {
                     foreach (var album in Subsonic.ListAlbums(artist.Value))
                     {
-                        ConsoleUtils.UOut(ConsoleColor.Yellow, "({0}) {1} - {2}", ConsoleColor.Black, artist.Key, album.Key, album.Value);
+                        ConsoleUtils.UOut(ConsoleColor.Yellow, "({0}) {1} - {2}", artist.Key, album.Key, album.Value);
                     }
                 }
             }

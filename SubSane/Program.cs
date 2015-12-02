@@ -95,9 +95,10 @@ namespace SubSane
 
                 if (ln.StartsWith("/"))
                 {
-                    if (ln.StartsWith("/exit"))
+                    if (ln.StartsWith("/exit"))   //todo : yuck.
                     {
                         exitProgram = true;
+                        continue;
                     }
                     CliCommandFactory.Execute(ThePlayer, ln);
                 }
@@ -108,11 +109,18 @@ namespace SubSane
                         Subsonic.AddChatMessage(ln);
                     }
                 }
-                foreach (var msg in Subsonic.GetChatMessages(LastMsgDate).OrderBy(cm => cm.Date))
+                //todo : messages should be fetched async so we get more of a live chat idea
+                //todo : i keep seeing the whole message log. this sucks
+                IOrderedEnumerable<ChatMessage> messages = Subsonic.GetChatMessages(LastMsgDate).OrderBy(cm => cm.Date);
+
+                foreach (var msg in messages)
                 {
-                    ConsoleUtils.UOut(ConsoleColor.Cyan, msg.ToString());
+                    if (msg.Date >= LastMsgDate)
+                    {
+                        ConsoleUtils.UOut(ConsoleColor.Cyan, msg.ToString());
+                    }
                 }
-                LastMsgDate = DateTime.Now;
+                LastMsgDate = messages.Max(msg => msg.Date);
             }
             ThePlayer.Stop();
         }
@@ -123,13 +131,12 @@ namespace SubSane
             {
                 while (ThePlayer.PlayQueue.Count < 10)
                 {
-                    //todo : partymode command is now no longer there
-                    CliCommandFactory.Execute(ThePlayer, "/random");     //ewww
+                    CliCommandFactory.Execute(ThePlayer, "/random");     //todo : ewww. this ain't pretty
                 }
             }
             if (ThePlayer.PlayQueue.Count > 0)
             {
-                ConsoleUtils.UOut(ConsoleColor.Black, "Now playing : {0}", ConsoleColor.White, ThePlayer.PlayQueue.Peek().Name);
+                ConsoleUtils.UOut(ConsoleColor.Black, "Now playing : {0}", ConsoleColor.White, ThePlayer.PlayQueue.Peek().ToString());
             }
         }
           
@@ -150,8 +157,8 @@ namespace SubSane
             {
                 Console.ResetColor();
                 Console.Clear();
+                Console.Out.Flush();
                 EnterMainLoop();
-
             }
         }        
 

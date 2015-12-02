@@ -14,6 +14,15 @@ namespace SubSane.ConsoleForms
             Console.BackgroundColor = backgroundColor;
             Console.Out.WriteLine(message, formatParams);
             Console.ResetColor();
+            Console.Out.Flush();
+        }
+
+        public static void UOut(ConsoleColor foregroundColor, string message, params object[] formatParams)
+        {
+            Console.ForegroundColor = foregroundColor;
+            Console.Out.WriteLine(message, formatParams);
+            Console.ResetColor();
+            Console.Out.Flush();
         }
     }
 }

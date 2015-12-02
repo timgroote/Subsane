@@ -35,7 +35,7 @@ namespace SubSane.CliCommands
 
             foreach (Song songadong in Subsonic.ListSongsByAlbumId(albumid))
             {
-                ConsoleUtils.UOut(ConsoleColor.Yellow, "{0} ({1})", ConsoleColor.Black, songadong.Name, songadong.Id);
+                ConsoleUtils.UOut(ConsoleColor.Yellow, "{0} ({1})", songadong.Name, songadong.Id);
             }
         }
     }

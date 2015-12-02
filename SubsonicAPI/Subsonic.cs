@@ -177,7 +177,7 @@ namespace SubsonicAPI
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             if (since.HasValue)
             {
-                parameters.Add("since", DateTimeToolkit.ConvertToUnixTimestamp(since.Value).ToString(CultureInfo.InvariantCulture));
+                parameters.Add("since", DateTimeToolkit.ConvertToSubsonicTimestamp(since.Value).ToString(CultureInfo.InvariantCulture));
             }
             // Make the request
             Stream theStream = MakeGenericRequest("getChatMessages", parameters);
@@ -343,11 +343,29 @@ namespace SubsonicAPI
                     for (i = 0; i < myXML.ChildNodes[1].FirstChild.ChildNodes.Count; i++)
                     {
                         bool isDir = Boolean.Parse(myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["isDir"].Value);
-                        
+
                         if (isDir)
-                            theFolder.AddFolder(MusicFolder.FromXml(myXML.ChildNodes[1].FirstChild.ChildNodes[i]));
+                        {
+                            try
+                            {
+                                theFolder.AddFolder(MusicFolder.FromXml(myXML.ChildNodes[1].FirstChild.ChildNodes[i]));
+                            }
+                            catch (Exception e)
+                            {
+                                //todo log
+                            }
+                        }
                         else
-                            theFolder.AddSong(Song.FromXml(myXML.ChildNodes[1].FirstChild.ChildNodes[i]));
+                        {
+                            try
+                            {
+                                theFolder.AddSong(Song.FromXml(myXML.ChildNodes[1].FirstChild.ChildNodes[i]));
+                            }
+                            catch (Exception)
+                            {
+                                //todo log
+                            }
+                        }
                     }
                 }
             }

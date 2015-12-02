@@ -25,7 +25,7 @@ namespace SubSane.CliCommands
         {
             foreach (KeyValuePair<String, Song> p in Subsonic.GetNowPlaying())
             {
-                ConsoleUtils.UOut(ConsoleColor.Yellow, "{0} => {1} {2}", ConsoleColor.Black, p.Key, p.Value.Name, p.Value.Id);
+                ConsoleUtils.UOut(ConsoleColor.Yellow, "{0} => {1} {2}", p.Key, p.Value.Name, p.Value.Id);
             }
         }
     }

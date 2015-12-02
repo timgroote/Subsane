@@ -66,6 +66,8 @@
     <Compile Include="CliCommands\DumbMode.cs" />
     <Compile Include="CliCommands\Partymode.cs" />
     <Compile Include="CliCommands\Whatsplaying.cs" />
+    <Compile Include="ConsoleForms\Button.cs" />
+    <Compile Include="ConsoleForms\Buttons.cs" />
     <Compile Include="Players\BassNetPlayer.cs" />
     <Compile Include="CliCommands\CliCommandType.cs" />
     <Compile Include="CliCommands\Help.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="ConsoleForms\StdConsoleObject.cs" />
     <Compile Include="ConsoleForms\Textbox.cs" />
     <Compile Include="ConsoleForms\Textboxes.cs" />
+    <Compile Include="SubSaneConsoleForms\PlaybackForm.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="Players\IPlayer.cs" />
     <Compile Include="Players\PlayMode.cs" />

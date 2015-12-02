@@ -24,7 +24,8 @@ namespace SubSane.CliCommands
             new Skip(),
             new Stop(),
             new Partymode(),
-            new DumbMode()
+            new DumbMode(),
+            new WhatsPlaying()
         };
 
         public static void Execute(IPlayer player, string input)
@@ -35,8 +36,7 @@ namespace SubSane.CliCommands
 
             if (!(tokens[0].StartsWith("/")))
             {
-                //is chat message?   
-                Console.Out.WriteLine("TODO : CHAT?");
+                throw new ArgumentException("commands should always begin with a slash (/)");
             }
 
             tokens[0] = tokens[0].Remove(0, 1); //remove pre slash

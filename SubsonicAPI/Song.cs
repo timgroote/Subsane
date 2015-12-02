@@ -54,6 +54,7 @@ namespace SubsonicAPI
         {
             if (xmlNode == null) return null;
             if (xmlNode.Attributes == null) return null;
+            
             string title = xmlNode.Attributes["title"].Value;
             string id = xmlNode.Attributes["id"].Value;
             string artist = xmlNode.Attributes["artist"].Value;

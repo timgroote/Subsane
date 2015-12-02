@@ -36,7 +36,7 @@ namespace SubsonicAPI
             return new ChatMessage(
                 ch.Attributes["username"].Value,
                 ch.Attributes["message"].Value,
-                DateTimeToolkit.ConvertFromUnixTimestamp(double.Parse(ch.Attributes["time"].Value)/1000)    //todo : timestamps are wrong. nobody cares to tell me what i'm looking @
+                DateTimeToolkit.ConvertFromSubsonicTimestamp(double.Parse(ch.Attributes["time"].Value))    //todo : timestamps are wrong. nobody cares to tell me what i'm looking @
             );
         }
     }
