@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using SubsonicAPI;
+using SubSane.ConsoleForms;
 using Un4seen.Bass;
 
 namespace SubSane.Players
@@ -41,6 +42,7 @@ namespace SubSane.Players
         public BassNetPlayer()
         {
             PlayQueue = new Queue<Song>();
+            PlayedSongs = new Queue<Song>();
             Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
         }
 
@@ -119,18 +121,15 @@ namespace SubSane.Players
                 }
                 
                 State = PlayState.Playing;
-                Console.ResetColor();
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.Out.WriteLine("downloading...");
+                ConsoleUtils.UOut(ConsoleColor.DarkGreen, "downloading...");
                 //todo : this should happen in a background thread.
                 byte[] songBytes = Subsonic.PreloadSong(CurrentSong.Id);
                 _hgcFile = GCHandle.Alloc(songBytes, GCHandleType.Pinned);
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.Out.WriteLine("download complete. playing");
-                Console.ForegroundColor = ConsoleColor.White;
+                ConsoleUtils.UOut(ConsoleColor.DarkGreen, "download complete.");
+                
                 _currentSongChannel = Bass.BASS_StreamCreateFile(_hgcFile.AddrOfPinnedObject(), 0, songBytes.Length, BASSFlag.BASS_SAMPLE_FLOAT);
                 Bass.BASS_ChannelPlay(_currentSongChannel, false);
-                Console.ResetColor();
+                
                 if (!_playThread.IsAlive)
                 {
                     if (_playThread.ThreadState == ThreadState.Running)

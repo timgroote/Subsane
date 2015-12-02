@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChatMessage.cs" />
+    <Compile Include="DateTimeToolkit.cs" />
     <Compile Include="LoginResult.cs" />
     <Compile Include="MusicFolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -2,14 +2,12 @@ using SubSane.Players;
 
 namespace SubSane.CliCommands
 {
-    public class Pause : CliCommandType
+    public class DumbMode : CliCommandType
     {
-        public static readonly string[] Aliases = { "pause" };
-
 
         public override string Description
         {
-            get { return "pause or resume playback"; }
+            get { return "stops party mode and resumes playback via normal enqueuing"; }
         }
 
         public override string[] CallStrings
@@ -17,9 +15,11 @@ namespace SubSane.CliCommands
             get { return Aliases; }
         }
 
+        public static readonly string[] Aliases = {"dumbmode"};
+
         public override void Execute(IPlayer player, params string[] parameters)
         {
-            player.Pause();
+            Program.mode = PlayMode.Dumb;
         }
     }
 }

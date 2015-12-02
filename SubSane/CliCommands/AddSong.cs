@@ -11,9 +11,6 @@ namespace SubSane.CliCommands
 {
     public class AddSong : CliCommandType
     {
-        public AddSong(string input) : base(input)
-        {
-        }
 
         public static readonly string[] Aliases = { "addsong", "addid", "enqueuesong", "enqueueid" };
 

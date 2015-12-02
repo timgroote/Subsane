@@ -6,9 +6,6 @@ namespace SubSane.CliCommands
 {
     public class Info : CliCommandType
     {
-        public Info(string input) : base(input)
-        {
-        }
 
         public override string Description
         {
@@ -20,7 +17,7 @@ namespace SubSane.CliCommands
             get { return Aliases; }
         }
 
-        public static readonly string[] Aliases = {"stop"};
+        public static readonly string[] Aliases = {"info"};
 
         public override void Execute(IPlayer player, params string[] parameters)
         {

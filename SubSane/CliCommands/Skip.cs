@@ -9,10 +9,6 @@ namespace SubSane.CliCommands
             "skip"
         };
 
-        public Skip(string input) : base(input)
-        {
-        }
-
         public override string Description
         {
             get { return "skip the currently playing song"; }

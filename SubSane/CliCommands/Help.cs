@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SubSane.ConsoleForms;
 using SubSane.Players;
 
 namespace SubSane.CliCommands
@@ -10,10 +11,6 @@ namespace SubSane.CliCommands
     public class Help : CliCommandType
     {
         public static readonly string[] Aliases = { "?", "help", "wtf" };
-
-        public Help(string input) : base(input)
-        {
-        }
 
         public override string Description {
             get { return "shows this list"; }
@@ -27,6 +24,12 @@ namespace SubSane.CliCommands
         }
         public override void Execute(IPlayer player, params string[] parameters)
         {
+
+            foreach (var commandType in CliCommandFactory.KnownTypes)
+            {
+                ConsoleUtils.UOut(ConsoleColor.Blue, String.Join(" /",commandType.CallStrings));
+            }
+
             Console.Out.WriteLine(@"/exit
 	quit subsane
 

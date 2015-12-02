@@ -43,9 +43,5 @@ namespace SubSane.CliCommands
                 }
             }
         }
-
-        public PlayList(string input) : base(input)
-        {
-        }
     }
 }

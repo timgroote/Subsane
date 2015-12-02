@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Net;
 using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using System.Threading;
 using System.Xml;
 
 namespace SubsonicAPI
@@ -45,10 +47,11 @@ namespace SubsonicAPI
             authHeader = user + ":" + password;
             authHeader = Convert.ToBase64String(Encoding.Default.GetBytes(authHeader));
 
-            Stream theStream = MakeGenericRequest("ping", null);
-
             try
             {
+                Stream theStream = MakeGenericRequest("ping", null);
+
+            
                 using (StreamReader sr = new StreamReader(theStream))
                 {
                     string res = sr.ReadToEnd();
@@ -66,7 +69,7 @@ namespace SubsonicAPI
             {
                   //todo : log exception
             }
-            return new LoginResult(false, "exception!");
+            return new LoginResult(false, "exception! (is your server, username and password correct?)");
         }
 
         /// <summary>
@@ -157,6 +160,47 @@ namespace SubsonicAPI
 
             return s;
         }
+
+        public static void AddChatMessage(string msg)
+        {
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters.Add("message", msg);
+            Stream theStream = MakeGenericRequest("addChatMessage", parameters);
+            using (StreamReader sr = new StreamReader(theStream))
+            {
+                string result = sr.ReadToEnd();
+            }
+            //todo : parse and verify
+        }
+
+        public static List<ChatMessage> GetChatMessages(DateTime? since)
+        {
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            if (since.HasValue)
+            {
+                parameters.Add("since", DateTimeToolkit.ConvertToUnixTimestamp(since.Value).ToString(CultureInfo.InvariantCulture));
+            }
+            // Make the request
+            Stream theStream = MakeGenericRequest("getChatMessages", parameters);
+
+            List<ChatMessage> messages = new List<ChatMessage>();
+
+            using (StreamReader sr = new StreamReader(theStream))
+            {
+                string result = sr.ReadToEnd();
+
+                // Parse the resulting XML string into an XmlDocument
+                XmlDocument myXML = new XmlDocument();
+                myXML.LoadXml(result);
+                if (myXML.ChildNodes[1].Name != "subsonic-response") return messages;
+                if (myXML.ChildNodes[1].FirstChild.Name != "chatMessages") return messages;
+                var messagesElement = myXML.ChildNodes[1].FirstChild;
+
+                messages.AddRange(from XmlElement ch in messagesElement.ChildNodes where ch.Name == "chatMessage" select ChatMessage.FromXml(ch));
+            }
+
+            return messages;
+        } 
 
         /// <summary>
         /// Returns an indexed structure of all artists.

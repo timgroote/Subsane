@@ -4,9 +4,6 @@ namespace SubSane.CliCommands
 {
     public class Stop : CliCommandType
     {
-        public Stop(string input) : base(input)
-        {
-        }
 
         public override string Description
         {

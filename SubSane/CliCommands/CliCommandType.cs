@@ -13,9 +13,9 @@ namespace SubSane.CliCommands
 
         public abstract void Execute(IPlayer player, params string[] parameters);
 
-        public CliCommandType(string input)
+        protected CliCommandType()
         {
-            tokens = input.Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+            
         }
     }
 }

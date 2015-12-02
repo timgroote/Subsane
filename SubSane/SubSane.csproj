@@ -62,6 +62,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CliCommands\CliCommandFactory.cs" />
+    <Compile Include="CliCommands\DumbMode.cs" />
+    <Compile Include="CliCommands\Partymode.cs" />
+    <Compile Include="CliCommands\Whatsplaying.cs" />
     <Compile Include="Players\BassNetPlayer.cs" />
     <Compile Include="CliCommands\CliCommandType.cs" />
     <Compile Include="CliCommands\Help.cs" />

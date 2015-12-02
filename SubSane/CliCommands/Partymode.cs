@@ -1,17 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SubsonicAPI;
-using SubSane.ConsoleForms;
 using SubSane.Players;
 
 namespace SubSane.CliCommands
 {
-    public class AddRandomSong : CliCommandType
+    public class Partymode : CliCommandType
     {
-        private static Random r = null;
+        private static Random r;
 
         private static Random randomLazy
         {
@@ -19,44 +16,35 @@ namespace SubSane.CliCommands
             {
                 if (r == null)
                 {
-                    r = new Random();
+                    r= new Random();
                 }
                 return r;
             }
         }
 
-        public static readonly string[] Aliases = { "random", "addrandom", "addshuffle"};
-        
         public override string Description
         {
-            get { return "enqueues a random song"; }
+            get { return "enqueues random songs (maintains a list of at least 10 songs)"; }
         }
-        public override string[] CallStrings {
-            get
-            {
-                return Aliases;
-            }
+
+        public override string[] CallStrings
+        {
+            get { return Aliases; }
         }
+
+        public static readonly string[] Aliases = {"partymode"};
+
         public override void Execute(IPlayer player, params string[] parameters)
         {
-            Song s = GetRandomSong();
-            if (s != null && s.Name != null && s.Id != null)
-            {
-                try
-                {
-                    player.AddSong(GetRandomSong());
-                }
-                catch (Exception e)
-                {
-                    ConsoleUtils.UOut(ConsoleColor.Red, "cannot read song properties. \r\n{1}\r\n{2}", ConsoleColor.White, e.Message, e.StackTrace);
-                }
+            Program.mode = PlayMode.Party;
 
-            }
-            else
+            while (player.GetQueue().Count < 10)
             {
-                ConsoleUtils.UOut(ConsoleColor.Red, "Error getting random song. nothing enqueued.");
+                player.AddSong(GetRandomSong());
             }
+
         }
+
         private Song GetRandomSong()
         {
             var artists = Subsonic.GetArtistIndexes();

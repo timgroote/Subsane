@@ -7,9 +7,6 @@ namespace SubSane.CliCommands
 
         public static readonly string[] Aliases = { "play", "resume" };
 
-        public Play(string input) : base(input)
-        {
-        }
 
         public override string Description
         {

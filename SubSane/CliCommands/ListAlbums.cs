@@ -10,10 +10,7 @@ using SubSane.Players;
 namespace SubSane.CliCommands
 {
     public class ListAlbums : CliCommandType
-    {
-        public ListAlbums(string input) : base(input)
-        {
-        }
+    { 
 
         public static readonly string[] Aliases = { "listalbums", "findalbums", "searchalbums" };
 
