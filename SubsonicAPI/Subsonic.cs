@@ -163,8 +163,7 @@ namespace SubsonicAPI
 
         public static void AddChatMessage(string msg)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("message", msg);
+            Dictionary<string, string> parameters = new Dictionary<string, string> {{"message", msg}};
             Stream theStream = MakeGenericRequest("addChatMessage", parameters);
             using (StreamReader sr = new StreamReader(theStream))
             {
